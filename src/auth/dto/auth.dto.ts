@@ -11,5 +11,25 @@ export class AuthDto{
 
     @IsString()
     @IsNotEmpty()
+    firstName: string;
+
+    @IsString()
+    @IsNotEmpty()
+    lastName: string;
+
+    @IsString()
+    @IsNotEmpty()
     password: string;
+}
+
+export class UpdatePasswordDto {
+
+    @IsNotEmpty()
+    @IsString() 
+    new_password: string;
+
+    @IsNotEmpty()
+    @IsString() 
+    old_password: string;
+
 }

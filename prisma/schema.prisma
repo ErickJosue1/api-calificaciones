@@ -17,13 +17,23 @@ model User {
 
   email String @unique
   hash  String
+  role Role
+
 
   firstName String?
   lastName  String?
   scores score[]
 
 
+
+
   @@map("users")
+}
+
+enum Role {
+  STUDENT
+  ADMIN
+  TEACHER
 }
 
 model score {
