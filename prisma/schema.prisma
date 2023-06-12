@@ -17,7 +17,7 @@ model User {
 
   email String @unique
   hash  String
-  role Role
+  role Role?
 
 
   firstName String?
