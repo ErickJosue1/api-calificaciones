@@ -30,4 +30,3 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
 
 }
 
-export interface JwtPayload {  login: string;}
