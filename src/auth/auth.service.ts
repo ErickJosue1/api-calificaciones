@@ -6,6 +6,8 @@ import e from "express";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime";
 import { JwtService } from "@nestjs/jwt";
 import { ConfigService } from "@nestjs/config";
+import { Role } from "@prisma/client";
+
 
 @Injectable()
 export class AuthService {
@@ -15,13 +17,17 @@ export class AuthService {
 
         const hash = await argon.hash(dto.password);
 
+        const roles = Object.values(Role);
+        console.log(Role[roles[dto.role]])
+
         try {
             const user = await this.prisma.user.create({
                 data: {
                     email: dto.email,
                     firstName: dto.firstName,
                     lastName: dto.lastName,
-                    hash
+/*                     role: Role['ADMIN'],
+ */                    hash
                 },
             })
 
@@ -54,7 +60,7 @@ export class AuthService {
         return this.signToken(user.id, user.email)
     }
 
-    async signToken(userId: number, email: string): Promise<{access_token: string, user: object}> {
+    async signToken(userId: number, email: string): Promise<{ access_token: string, user: object }> {
         const payload = {
             sub: userId,
             email
@@ -63,7 +69,7 @@ export class AuthService {
         const secret = this.config.get('JWT_SECRET')
 
         const token = await this.jwt.signAsync(payload, {
-            expiresIn: "15m", 
+            expiresIn: "15m",
             secret: secret
         })
 

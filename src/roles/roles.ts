@@ -1,7 +1,9 @@
-export const Role: { [x: string]: 'STUDENT' | 'ADMIN' | 'TEACHER'} = {
-    STUDENT: 'STUDENT',
-    ADMIN: 'ADMIN',
-    TEACHER: 'TEACHER'
+export const Role: {
+  USER: 'USER'
+  ADMIN: 'ADMIN'
+} = {
+  USER: 'USER',
+  ADMIN: 'ADMIN',
 }
-  
+
 export type Role = typeof Role[keyof typeof Role]
