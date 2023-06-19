@@ -6,7 +6,6 @@ import e from "express";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime";
 import { JwtService } from "@nestjs/jwt";
 import { ConfigService } from "@nestjs/config";
-import { Role } from "@prisma/client";
 
 
 @Injectable()
@@ -17,8 +16,6 @@ export class AuthService {
 
         const hash = await argon.hash(dto.password);
 
-        const roles = Object.values(Role);
-        console.log(Role[roles[dto.role]])
 
         try {
             const user = await this.prisma.user.create({
@@ -26,8 +23,12 @@ export class AuthService {
                     email: dto.email,
                     firstName: dto.firstName,
                     lastName: dto.lastName,
-/*                     role: Role['ADMIN'],
- */                    hash
+                    hash,
+                    role: {
+                        connect: {
+                            id: dto.role.id,
+                        }
+                    }
                 },
             })
 
@@ -38,7 +39,7 @@ export class AuthService {
                     'Credentials taken',
                 )
             }
-            throw error.code
+            throw error
         }
     }
 

@@ -17,23 +17,16 @@ model User {
 
   email String @unique
   hash  String
-  role Role?
 
+  roleID Int
+
+  role Role @relation(fields: [roleID], references: [id])
 
   firstName String?
   lastName  String?
-  scores score[]
-
-
-
+  scores    score[]
 
   @@map("users")
-}
-
-enum Role {
-  STUDENT
-  ADMIN
-  TEACHER
 }
 
 model score {
@@ -48,9 +41,19 @@ model score {
   subject String
 
   userId Int
-  user User @relation(fields: [userId], references: [id])
+  user   User  @relation(fields: [userId], references: [id])
+
 
   @@map("scores")
 }
 
+model Role {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
+  User   User[]
+
+  @@map("roles")
+}

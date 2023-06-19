@@ -18,10 +18,10 @@ export class UserService {
     }
 
     async updateUser(id: number, updateUserDto: UpdateUserDto): Promise<User> {
-        const { firstName, password, role } = updateUserDto;
+        const { firstName, password } = updateUserDto;
         const hash = await argon.hash(password);
 
-        return this.prisma.user.update({ where: { id }, data: { firstName, role, hash } });
+        return this.prisma.user.update({ where: { id }, data: { firstName, hash } });
     }
 
     async deleteUser(id: number): Promise<void> {

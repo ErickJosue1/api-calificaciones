@@ -1,12 +1,15 @@
 import { User } from '@prisma/client';
-import{
+import { Role } from '@prisma/client';
+import {
     IsEmail,
     IsNotEmpty,
-    IsString
+    IsString,
+    IsEnum 
 } from 'class-validator';
-import { Role } from '@prisma/client' 
 
-export class AuthDto{
+
+
+export class AuthDto {
     @IsEmail()
     @IsNotEmpty()
     email: string;
@@ -23,15 +26,14 @@ export class AuthDto{
     @IsNotEmpty()
     password: string;
 
-    @IsString()
     @IsNotEmpty()
     role: Role;
 }
 
-export class UpdateUserDto  {
+export class UpdateUserDto {
 
     @IsNotEmpty()
-    @IsString() 
+    @IsString()
     password: string;
 
     @IsString()
@@ -46,7 +48,6 @@ export class UpdateUserDto  {
     @IsNotEmpty()
     email: string;
 
-    @IsString()
     @IsNotEmpty()
     role: Role;
 }
