@@ -1,31 +1,21 @@
-import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
+import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { Role } from '@prisma/client' 
+import { Observable } from 'rxjs';
 
 @Injectable()
 export class RolesGuard implements CanActivate {
-    constructor(private readonly reflector: Reflector) { }
+  constructor(private readonly reflector: Reflector) {}
 
-    canActivate(context: ExecutionContext): boolean {
-        const requiredRoles = this.reflector.get<Role[]>('roles',
-            context.getHandler(),
-        );
-
-        console.log(requiredRoles)
-
-        if (!requiredRoles.length) {
-            // No role requirement specified, access granted
-            return true;
-        }
-
-        const { user } = context.switchToHttp().getRequest();
-    
-        if (!user || !requiredRoles.includes(user.role)) {
-            // User role does not match the required roles
-            return false;
-        }
-
-        // User has the required role, access granted
-        return true;
+  canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
+    const requiredRoles = this.reflector.get<string[]>('roles', context.getHandler());
+    if (!requiredRoles) {
+      return true; // No roles are required, so access is granted
     }
+
+    const { user } = context.switchToHttp().getRequest();
+    const userRoles = user.roles.map(role => role.name);
+    const hasRequiredRole = userRoles.some(role => requiredRoles.includes(role));
+
+    return hasRequiredRole;
+  }
 }

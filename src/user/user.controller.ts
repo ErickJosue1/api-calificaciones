@@ -5,20 +5,23 @@ import { Request } from 'express';
 import { GetUser } from 'src/auth/decorator/get-user.decorator';
 import { JwtGuard } from 'src/auth/guard';
 import { RolesGuard } from 'src/auth/guard/role.guard';
-import { Role } from 'src/roles/roles';
 import { UserService } from './user.service';
 import { UpdateUserDto } from 'src/auth/dto';
+import { Roles } from 'src/auth/decorator/roles.decorator';
 
-@UseGuards(JwtGuard)
+
+@UseGuards(JwtGuard,RolesGuard)
 @Controller('users')
 export class UserController {
     constructor(private readonly userService: UserService) { }
 
     @Get('all')
+    @Roles('TEACHER', 'ADMIN')
     getAllUsers(): Promise<User[]> {
         return this.userService.getAllUsers();
     }
 
+    @Roles('TEACHER', 'ADMIN')
     @Put(':id')
     updateUser(@Param('id') id: number, @Body() updateUserDto: UpdateUserDto): Promise<User> {
         let num = +id;
@@ -26,12 +29,14 @@ export class UserController {
     }
 
     @Get('me')
+    @Roles()
     getMe(@GetUser() user: User, @GetUser('id') id: string) {
         console.log(id)
         return user;
     }
 
     @Delete(':id')
+    @Roles('TEACHER', 'ADMIN')
     deleteUser(@Param('id') id: number): Promise<void> {
         let num = +id;
         return this.userService.deleteUser(num);

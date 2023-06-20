@@ -6,7 +6,7 @@ import { UpdateUserDto } from 'src/auth/dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Role } from '@prisma/client'
 import * as argon from 'argon2'
-
+import { RolesGuard } from 'src/auth/guard/role.guard';
 
 
 @Injectable()
