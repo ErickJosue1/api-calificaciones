@@ -8,20 +8,20 @@ import { RolesGuard } from 'src/auth/guard/role.guard';
 import { UserService } from './user.service';
 import { UpdateUserDto } from 'src/auth/dto';
 import { Roles } from 'src/auth/decorator/roles.decorator';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 
 @UseGuards(JwtGuard, RolesGuard)
 @Controller('users')
 export class UserController {
-    constructor(private readonly userService: UserService) { }
+    constructor(private readonly userService: UserService, private prisma: PrismaService) { }
 
     @Get('all')
-    @Roles('TEACHER', 'ADMIN')
     getAllUsers(): Promise<User[]> {
         return this.userService.getAllUsers();
     }
 
-    @Roles('TEACHER', 'ADMIN')
+    @Roles('ADMIN')
     @Put(':id')
     updateUser(@Param('id') id: number, @Body() updateUserDto: UpdateUserDto): Promise<User> {
         let num = +id;
@@ -30,8 +30,15 @@ export class UserController {
 
     @Get('me')
     getMe(@GetUser() user: User, @GetUser('id') id: string) {
-        console.log(id)
-        return user;
+
+        const f_user = this.prisma.user.findUnique({
+            where: {
+              id: user.id,
+            },
+            include: { role: true }, // Include the role 
+          })
+
+        return f_user;
     }
 
     @Delete(':id')
