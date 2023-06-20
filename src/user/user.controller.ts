@@ -10,7 +10,7 @@ import { UpdateUserDto } from 'src/auth/dto';
 import { Roles } from 'src/auth/decorator/roles.decorator';
 
 
-@UseGuards(JwtGuard,RolesGuard)
+@UseGuards(JwtGuard, RolesGuard)
 @Controller('users')
 export class UserController {
     constructor(private readonly userService: UserService) { }
@@ -29,7 +29,6 @@ export class UserController {
     }
 
     @Get('me')
-    @Roles()
     getMe(@GetUser() user: User, @GetUser('id') id: string) {
         console.log(id)
         return user;
