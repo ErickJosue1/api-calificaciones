@@ -17,6 +17,7 @@ export class UserController {
     constructor(private readonly userService: UserService, private prisma: PrismaService) { }
 
     @Get('all')
+    @Roles('ADMIN')
     getAllUsers(): Promise<User[]> {
         return this.userService.getAllUsers();
     }

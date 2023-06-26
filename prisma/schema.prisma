@@ -25,6 +25,7 @@ model User {
   firstName String?
   lastName  String?
   scores    score[]
+  Subject   Subject[]
 
   @@map("users")
 }
@@ -41,8 +42,7 @@ model score {
   subject String
 
   userId Int
-  user   User  @relation(fields: [userId], references: [id])
-
+  user   User @relation(fields: [userId], references: [id])
 
   @@map("scores")
 }
@@ -53,7 +53,62 @@ model Role {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  User   User[]
+  User User[]
 
   @@map("roles")
+}
+
+model Career {
+  id        Int      @id @default(autoincrement())
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  subjects  Period[]
+}
+
+model Subject {
+  id        Int      @id @default(autoincrement())
+  name      String
+  user_id   Int?
+  career_id Int
+  period    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  user          User?           @relation(fields: [user_id], references: [id])
+  careers       Period[]
+  CriteriaGrade CriteriaGrade[]
+}
+
+model Period {
+  id         Int      @id @default(autoincrement())
+  period     Int
+  subject_id Int
+  career_id  Int
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @default(now())
+
+  subject Subject @relation(fields: [subject_id], references: [id])
+  career  Career  @relation(fields: [career_id], references: [id])
+
+}
+
+model Criteria {
+  id            Int             @id @default(autoincrement())
+  name          String
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @default(now())
+  CriteriaGrade CriteriaGrade[]
+}
+
+model CriteriaGrade {
+  id          Int      @id @default(autoincrement())
+  criteria_id Int
+  subject_id  Int
+  percentage  Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now())
+
+  criteria Criteria @relation(fields: [criteria_id], references: [id])
+  subject  Subject  @relation(fields: [subject_id], references: [id])
 }

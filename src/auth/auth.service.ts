@@ -6,6 +6,7 @@ import e from "express";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime";
 import { JwtService } from "@nestjs/jwt";
 import { ConfigService } from "@nestjs/config";
+import { Console } from "console";
 
 
 @Injectable()
@@ -15,6 +16,7 @@ export class AuthService {
     async signup(dto: AuthDto) {
 
         const hash = await argon.hash(dto.password);
+
 
         try {
             const user = await this.prisma.user.create({
