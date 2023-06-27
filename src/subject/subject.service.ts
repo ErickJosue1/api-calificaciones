@@ -12,6 +12,8 @@ export class SubjectService {
     return `This action returns all subject`;
   }
 
+  
+
   findOne(id: number) {
     return `This action returns a #${id} subject`;
   }

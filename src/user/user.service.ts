@@ -14,7 +14,7 @@ export class UserService {
     constructor(private prisma: PrismaService) { }
 
     async getAllUsers(): Promise<User[]> {
-        return this.prisma.user.findMany();
+        return this.prisma.user.findMany({ include: { role: true }, });
     }
 
     async updateUser(id: number, updateUserDto: UpdateUserDto): Promise<User> {
