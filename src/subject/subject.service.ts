@@ -1,9 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { CreateSubjectDto } from './dto/create-subject.dto';
 import { UpdateSubjectDto } from './dto/update-subject.dto';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class SubjectService {
+  constructor(private prisma: PrismaService){}
+
   create(createSubjectDto: CreateSubjectDto) {
     return 'This action adds a new subject';
   }
@@ -12,7 +15,14 @@ export class SubjectService {
     return `This action returns all subject`;
   }
 
-  
+  getSubjectStudents(id: number){
+    let users = this.prisma.period.findMany({
+      where: {
+        subject_id: id
+      }
+    })
+    
+  }
 
   findOne(id: number) {
     return `This action returns a #${id} subject`;

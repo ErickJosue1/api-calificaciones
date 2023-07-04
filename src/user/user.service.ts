@@ -7,11 +7,34 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { Role } from '@prisma/client'
 import * as argon from 'argon2'
 import { RolesGuard } from 'src/auth/guard/role.guard';
+import axios from 'axios';
 
 
 @Injectable()
 export class UserService {
     constructor(private prisma: PrismaService) { }
+
+    async renapoService(curp: string) {
+        try {
+            const response = await axios.get('https://curpws.bienestar.gob.mx/ServiceCurpPro/ConsultaPor/Curp/SAFD020411HMSNGVA5');
+            const data = response.data;
+            return data;
+        } catch (error) {
+            console.error(error);
+            return 'no pasa we';
+
+        }
+
+
+    }
+
+    async getUser(id: number) {
+        return this.prisma.user.findUnique({
+            where: {
+                id: id
+            }, include: { role: true },
+        });
+    }
 
     async getAllUsers(): Promise<User[]> {
         return this.prisma.user.findMany({ include: { role: true }, });

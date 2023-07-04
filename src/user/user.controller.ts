@@ -22,6 +22,13 @@ export class UserController {
         return this.userService.getAllUsers();
     }
 
+    @Get()
+    @Roles('ADMIN')
+    getUser(@Body() id: number) {
+        return this.userService.getUser(id);
+    }
+
+
     @Roles('ADMIN')
     @Put(':id')
     updateUser(@Param('id') id: number, @Body() updateUserDto: UpdateUserDto): Promise<User> {
@@ -29,15 +36,19 @@ export class UserController {
         return this.userService.updateUser(num, updateUserDto);
     }
 
+    @Get('curp')
+    renapoService(@Body() curp: string) {
+        return this.userService.renapoService(curp);
+    }
     @Get('me')
     getMe(@GetUser() user: User, @GetUser('id') id: string) {
 
         const f_user = this.prisma.user.findUnique({
             where: {
-              id: user.id,
+                id: user.id,
             },
             include: { role: true }, // Include the role 
-          })
+        })
 
         return f_user;
     }
