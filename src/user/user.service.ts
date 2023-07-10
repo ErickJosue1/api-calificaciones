@@ -20,6 +20,7 @@ export class UserService {
             
             const data = response.data;
             console.log(data)
+            console.log(`https://curpws.bienestar.gob.mx/ServiceCurpPro/ConsultaPor/Curp/`+curp)
             return data;
         } catch (error) {
             console.error(error);
