@@ -17,8 +17,9 @@ export class UserService {
     async renapoService(curp: string) {
         try {
             const response = await axios.get(`https://curpws.bienestar.gob.mx/ServiceCurpPro/ConsultaPor/Curp/`+curp);
-            console.log(response)
+            
             const data = response.data;
+            console.log(data)
             return data;
         } catch (error) {
             console.error(error);
