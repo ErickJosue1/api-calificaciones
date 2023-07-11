@@ -1,4 +1,4 @@
-import { Controller, Get, Req, UseGuards, Put, Body, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Req, UseGuards, Put, Body, Param, Delete, Headers } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { User } from '@prisma/client';
 import { Request } from 'express';
@@ -37,7 +37,7 @@ export class UserController {
     }
 
     @Get('curp')
-    renapoService(@Param('curp') curp: string) {
+    renapoService(@Headers('curp') curp: string) {
         console.log(curp)
         return this.userService.renapoService(curp);
     }
