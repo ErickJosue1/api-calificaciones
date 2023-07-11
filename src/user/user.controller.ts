@@ -37,8 +37,8 @@ export class UserController {
     }
 
     @Get('curp')
-    renapoService(@Body() curp: string) {
-        return this.userService.renapoService(curp);
+    renapoService(@Body() curp: object) {
+        return this.userService.renapoService(curp['curp']);
     }
     @Get('me')
     getMe(@GetUser() user: User, @GetUser('id') id: string) {
