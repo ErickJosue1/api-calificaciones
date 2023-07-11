@@ -36,8 +36,8 @@ export class UserController {
         return this.userService.updateUser(num, updateUserDto);
     }
 
-    @Get('curp')
-    renapoService(@Headers('curp') curp: string) {
+    @Get('curp/:curp')
+    renapoService(@Param('curp') curp: string) {
         console.log(curp)
         return this.userService.renapoService(curp);
     }
