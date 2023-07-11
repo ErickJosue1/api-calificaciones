@@ -18,6 +18,10 @@ model User {
   email String @unique
   hash  String
 
+  curp String
+
+  matricule String
+
   roleID Int
 
   role Role @relation(fields: [roleID], references: [id])
