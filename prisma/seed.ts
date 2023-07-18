@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client';
+import * as argon from 'argon2'
 
 const prisma = new PrismaClient();
 
@@ -25,6 +26,25 @@ async function main() {
   ];
 
   await seedCareers(careers);
+
+  const hash = await argon.hash("12345");
+
+  await prisma.user.create({
+    data: {
+      lastName: "I'm",
+      firstName: "Admin",
+      email: "tu_gfa_1166@hotmail.com",
+      curp: "SAFD020411HMSNGVA5",
+      matricule: "SAFD020411HMSNGVA5",
+      hash,
+      role: {
+        connect: {
+          id: 3,
+        }
+      }
+
+    }
+  })
 
   for (const role of roles) {
     await prisma.role.create({ data: { name: role } });
