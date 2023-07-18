@@ -29,22 +29,30 @@ async function main() {
 
   const hash = await argon.hash("12345");
 
-  await prisma.user.create({
-    data: {
-      lastName: "I'm",
-      firstName: "Admin",
-      email: "tu_gfa_1166@hotmail.com",
-      curp: "SAFD020411HMSNGVA5",
-      matricule: "SAFD020411HMSNGVA5",
-      hash,
-      role: {
-        connect: {
-          id: 3,
-        }
-      }
 
+  try {
+    await prisma.user.create({
+      data: {
+        email: "tu_gfa_1166@hotmail.com",
+        firstName: "I'm",
+        lastName: "Admin",
+        curp: "SAFD020411HMSNGVA5",
+        matricule: "SAFD020411HMSNGVA5",
+        hash,
+        role: {
+          connect: {
+            id: 3,
+          }
+        }
+      },
+    })
+  } catch (error) {
+    if (error.code == 'P2002') {
+      console.log(error)
     }
-  })
+    throw error
+  }
+
 
   for (const role of roles) {
     await prisma.role.create({ data: { name: role } });
