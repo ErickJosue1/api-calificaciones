@@ -18,6 +18,10 @@ model User {
   email String @unique
   hash  String
 
+  curp String
+
+  matricule String
+
   roleID Int
   
   curp String
@@ -87,7 +91,19 @@ model Subject {
   user          User?           @relation(fields: [user_id], references: [id])
   career        Career          @relation(fields: [career_id], references: [id])
   CriteriaGrade CriteriaGrade[]
-  score         score[]
+}
+
+model Period {
+  id         Int      @id @default(autoincrement())
+  period     Int
+  subject_id Int
+  career_id  Int
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @default(now())
+
+  subject Subject @relation(fields: [subject_id], references: [id])
+  career  Career  @relation(fields: [career_id], references: [id])
+
 }
 
 model Criteria {

@@ -1,4 +1,4 @@
-import { Controller, Get, Req, UseGuards, Put, Body, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Req, UseGuards, Put, Body, Param, Delete, Headers } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { User } from '@prisma/client';
 import { Request } from 'express';
@@ -22,6 +22,13 @@ export class UserController {
         return this.userService.getAllUsers();
     }
 
+    @Get()
+    @Roles('ADMIN')
+    getUser(@Body() id: number) {
+        return this.userService.getUser(id);
+    }
+
+
     @Roles('ADMIN')
     @Put(':id')
     updateUser(@Param('id') id: number, @Body() updateUserDto: UpdateUserDto): Promise<User> {
@@ -29,15 +36,20 @@ export class UserController {
         return this.userService.updateUser(num, updateUserDto);
     }
 
+    @Get('curp/:curp')
+    renapoService(@Param('curp') curp: string) {
+        console.log(curp)
+        return this.userService.renapoService(curp);
+    }
     @Get('me')
     getMe(@GetUser() user: User, @GetUser('id') id: string) {
 
         const f_user = this.prisma.user.findUnique({
             where: {
-              id: user.id,
+                id: user.id,
             },
             include: { role: true }, // Include the role 
-          })
+        })
 
         return f_user;
     }
