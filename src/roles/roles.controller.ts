@@ -11,7 +11,7 @@ export class RolesController {
     return this.prismaService.role.findMany();
   }
 
-  @Get(':id')
+  @Get( ':id')
   async getRoleById(@Param('id') id: number): Promise<Role> {
     return this.prismaService.role.findUnique({
       where: { id },

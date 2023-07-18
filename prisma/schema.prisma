@@ -19,19 +19,23 @@ model User {
   hash  String
 
   roleID Int
+  
+  curp String
+  matricule String
 
   role Role @relation(fields: [roleID], references: [id])
 
   firstName String?
   lastName  String?
-  scores    score[]
+  scores    score[]   @relation(name: "Teacher")
   Subject   Subject[]
+  score     score[]
 
   @@map("users")
 }
 
 model score {
-  id        Int      @id @default(autoincrement())
+  // id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
 
@@ -39,11 +43,16 @@ model score {
   grade_2 Int?
   grade_3 Int?
 
-  subject String
+  subjectId Int
+  subject   Subject @relation(fields: [subjectId], references: [id])
+
+  teacherId Int
+  teacher   User @relation(name: "Teacher", fields: [teacherId], references: [id])
 
   userId Int
-  user   User @relation(fields: [userId], references: [id])
+  User   User @relation(fields: [userId], references: [id])
 
+  @@id([subjectId,teacherId,userId])
   @@map("scores")
 }
 
@@ -59,11 +68,11 @@ model Role {
 }
 
 model Career {
-  id        Int      @id @default(autoincrement())
+  id        Int       @id @default(autoincrement())
   name      String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
-  subjects  Period[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @default(now())
+  subjects  Subject[]
 }
 
 model Subject {
@@ -76,21 +85,9 @@ model Subject {
   updatedAt DateTime @default(now())
 
   user          User?           @relation(fields: [user_id], references: [id])
-  careers       Period[]
+  career        Career          @relation(fields: [career_id], references: [id])
   CriteriaGrade CriteriaGrade[]
-}
-
-model Period {
-  id         Int      @id @default(autoincrement())
-  period     Int
-  subject_id Int
-  career_id  Int
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @default(now())
-
-  subject Subject @relation(fields: [subject_id], references: [id])
-  career  Career  @relation(fields: [career_id], references: [id])
-
+  score         score[]
 }
 
 model Criteria {
