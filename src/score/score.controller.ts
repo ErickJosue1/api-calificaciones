@@ -14,7 +14,9 @@ export class ScoreController {
   @Get(':id')
   async getScoreById(@Param('id') id: number): Promise<score> {
     return this.prismaService.score.findUnique({
-      where: { id },
+      where:{
+        
+      },
     });
   }
 
@@ -24,11 +26,12 @@ export class ScoreController {
       data: score,
     });
   }
-
+  
   @Put(':id')
   async updateScore(@Param('id') id: number, @Body() score: score): Promise<score> {
     return this.prismaService.score.update({
-      where: { id },
+      where: {  },
+
       data: score,
     });
   }
@@ -36,7 +39,7 @@ export class ScoreController {
   @Delete(':id')
   async deleteScore(@Param('id') id: number): Promise<score> {
     return this.prismaService.score.delete({
-      where: { id },
+      where: {  },
     });
   }
 }

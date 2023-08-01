@@ -16,9 +16,8 @@ export class SubjectService {
   }
 
   getSubjectStudents(id: number){
-    let users = this.prisma.period.findMany({
+    let users = this.prisma.subject.findMany({
       where: {
-        subject_id: id
       }
     })
     
