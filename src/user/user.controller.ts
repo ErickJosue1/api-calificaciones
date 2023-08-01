@@ -22,10 +22,10 @@ export class UserController {
         return this.userService.getAllUsers();
     }
 
-    @Get()
+    @Get(':id')
     @Roles('ADMIN')
-    getUser(@Body() id: any) {
-        return this.userService.getUser(id.id);
+    getUser(@Param('id') id: number) {
+        return this.userService.getUser(id);
     }
 
 
