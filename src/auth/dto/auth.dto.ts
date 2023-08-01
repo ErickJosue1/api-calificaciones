@@ -24,6 +24,14 @@ export class AuthDto {
 
     @IsString()
     @IsNotEmpty()
+    curp: string;
+
+    @IsString()
+    @IsNotEmpty()
+    matricule: string;
+
+    @IsString()
+    @IsNotEmpty()
     password: string;
 
     @IsNotEmpty()
@@ -47,6 +55,14 @@ export class UpdateUserDto {
     @IsEmail()
     @IsNotEmpty()
     email: string;
+
+    @IsString()
+    @IsNotEmpty()
+    curp: string;
+
+    @IsString()
+    @IsNotEmpty()
+    matricule: string;
 
     @IsNotEmpty()
     role: Role;

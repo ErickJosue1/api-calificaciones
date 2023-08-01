@@ -19,7 +19,6 @@ model User {
   hash  String
 
   curp String
-
   matricule String
 
   roleID Int

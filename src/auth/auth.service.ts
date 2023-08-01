@@ -24,6 +24,8 @@ export class AuthService {
                     email: dto.email,
                     firstName: dto.firstName,
                     lastName: dto.lastName,
+                    curp: dto.curp,
+                    matricule: dto.matricule,
                     hash,
                     role: {
                         connect: {
