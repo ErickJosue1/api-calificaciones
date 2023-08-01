@@ -32,11 +32,15 @@ export class UserService {
     }
 
     async getUser(id: number) {
-        return this.prisma.user.findUnique({
+        const user = this.prisma.user.findUnique({
             where: {
                 id: id
             }, include: { role: true },
         });
+
+        delete (await user).hash;
+
+        return user;
     }
 
     async getAllUsers(): Promise<User[]> {
