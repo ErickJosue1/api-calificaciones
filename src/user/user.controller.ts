@@ -24,8 +24,8 @@ export class UserController {
 
     @Get()
     @Roles('ADMIN')
-    getUser(@Body() id: number) {
-        return this.userService.getUser(id);
+    getUser(@Body() id: any) {
+        return this.userService.getUser(id.id);
     }
 
 
