@@ -28,10 +28,6 @@ export class AuthDto {
 
     @IsString()
     @IsNotEmpty()
-    matricule: string;
-
-    @IsString()
-    @IsNotEmpty()
     password: string;
 
 
@@ -52,10 +48,6 @@ export class UpdateUserDto {
     @IsString()
     @IsNotEmpty()
     curp: string;
-
-    @IsString()
-    @IsNotEmpty()
-    matricule: string;
 
     @IsString()
     @IsNotEmpty()

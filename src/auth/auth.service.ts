@@ -17,6 +17,7 @@ export class AuthService {
 
         const hash = await argon.hash(dto.password);
 
+        const matricule = "000202020201";
 
         try {
             const user = await this.prisma.user.create({
@@ -25,7 +26,7 @@ export class AuthService {
                     firstName: dto.firstName,
                     lastName: dto.lastName,
                     curp: dto.curp,
-                    matricule: dto.matricule,
+                    matricule: matricule,
                     hash,
                     role: {
                         connect: {

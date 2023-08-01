@@ -55,7 +55,7 @@ export class UserController {
     }
 
     @Delete(':id')
-    @Roles('TEACHER', 'ADMIN')
+    @Roles('ADMIN')
     deleteUser(@Param('id') id: number): Promise<void> {
         let num = +id;
         return this.userService.deleteUser(num);
