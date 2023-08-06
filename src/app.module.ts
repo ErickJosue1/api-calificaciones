@@ -6,12 +6,14 @@ import { ScoreModule } from './score/score.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { ConfigModule } from '@nestjs/config';
 import { SubjectModule } from './subject/subject.module';
+import { CareerModule } from './career/career.module';
+import { GroupModule } from './group/group.module';
 
 
 
 
 @Module({
-  imports: [UserModule, RolesModule, AuthModule, ScoreModule, PrismaModule, ConfigModule.forRoot({isGlobal: true}), SubjectModule],
+  imports: [UserModule, RolesModule, AuthModule, ScoreModule, PrismaModule, ConfigModule.forRoot({isGlobal: true}), SubjectModule, CareerModule, GroupModule],
 
 })
 export class AppModule { }

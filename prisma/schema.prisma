@@ -18,42 +18,51 @@ model User {
   email String @unique
   hash  String
 
-  curp String
+  curp      String
   matricule String
 
   roleID Int
-
-  role Role @relation(fields: [roleID], references: [id])
+  role   Role @relation(fields: [roleID], references: [id])
 
   firstName String?
   lastName  String?
-  scores    score[]   @relation(name: "Teacher")
-  Subject   Subject[]
-  score     score[]
+
+  // Relation with Group model (Just for students)
+  groupID Int
+  group   Group @relation(fields: [groupID], references: [id])
+
+  // Relation with Score model as a student
+  scoresAsStudent Score[] @relation("StudentScores")
+
+  // Relation with Score model as a professor
+  scoresAsProfessor Score[] @relation("ProfessorScores")
 
   @@map("users")
 }
 
-model score {
-  // id        Int      @id @default(autoincrement())
+model Score {
+  id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  grade1    Float?
+  grade2    Float?
+  grade3    Float?
 
-  grade_1 Int?
-  grade_2 Int?
-  grade_3 Int?
+  // Relation with Group model (Redundant but work for the moment)
+  groupID Int
+  group   Group @relation(fields: [groupID], references: [id])
 
+  // Relation with User model when user role is Student
+  studentId Int
+  student   User @relation("StudentScores", fields: [studentId], references: [id])
+
+  // Relation with User model when user role is Teacher
+  professorId Int
+  professor   User @relation("ProfessorScores", fields: [professorId], references: [id])
+
+  // Relation with Subject model
   subjectId Int
   subject   Subject @relation(fields: [subjectId], references: [id])
-
-  teacherId Int
-  teacher   User @relation(name: "Teacher", fields: [teacherId], references: [id])
-
-  userId Int
-  User   User @relation(fields: [userId], references: [id])
-
-  @@id([subjectId, teacherId, userId])
-  @@map("scores")
 }
 
 model Role {
@@ -68,58 +77,40 @@ model Role {
 }
 
 model Career {
-  id        Int       @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   name      String
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @default(now())
-  subjects  Subject[]
-  Period    Period[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  // Relation with Subject model
+  subjects Subject[]
+
+  // Relation with Group model
+  groups Group[]
 }
 
 model Subject {
   id        Int      @id @default(autoincrement())
   name      String
-  user_id   Int?
-  career_id Int
-  period    String
+  period    Int
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
 
-  user          User?           @relation(fields: [user_id], references: [id])
-  career        Career          @relation(fields: [career_id], references: [id])
-  CriteriaGrade CriteriaGrade[]
-  score         score[]
-  Period        Period[]
+  // Relation with Career model
+  careerId Int
+  career   Career  @relation(fields: [careerId], references: [id])
+  Score    Score[]
 }
 
-model Period {
-  id         Int      @id @default(autoincrement())
-  period     Int
-  subject_id Int
-  career_id  Int
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @default(now())
+model Group {
+  id     Int    @id @default(autoincrement())
+  name   String
+  period Int
+  year   Int
 
-  subject Subject @relation(fields: [subject_id], references: [id])
-  career  Career  @relation(fields: [career_id], references: [id])
-}
-
-model Criteria {
-  id            Int             @id @default(autoincrement())
-  name          String
-  createdAt     DateTime        @default(now())
-  updatedAt     DateTime        @default(now())
-  CriteriaGrade CriteriaGrade[]
-}
-
-model CriteriaGrade {
-  id          Int      @id @default(autoincrement())
-  criteria_id Int
-  subject_id  Int
-  percentage  Int
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @default(now())
-
-  criteria Criteria @relation(fields: [criteria_id], references: [id])
-  subject  Subject  @relation(fields: [subject_id], references: [id])
+  // Relation with Career model
+  careerId Int
+  career   Career  @relation(fields: [careerId], references: [id])
+  User     User[]
+  Score    Score[]
 }

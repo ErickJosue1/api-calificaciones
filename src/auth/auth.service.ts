@@ -28,6 +28,11 @@ export class AuthService {
                     curp: dto.curp,
                     matricule: matricule,
                     hash,
+                    group:{
+                        connect:{
+                            id: dto.group.id
+                        }
+                    },
                     role: {
                         connect: {
                             id: dto.role.id,

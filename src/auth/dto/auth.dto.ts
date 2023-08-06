@@ -1,4 +1,4 @@
-import { User } from '@prisma/client';
+import { Group } from '@prisma/client';
 import { Role } from '@prisma/client';
 import {
     IsEmail,
@@ -30,6 +30,8 @@ export class AuthDto {
     @IsNotEmpty()
     password: string;
 
+    @IsNotEmpty()
+    group: Group;
 
     @IsNotEmpty()
     role: Role;
@@ -48,6 +50,9 @@ export class UpdateUserDto {
     @IsString()
     @IsNotEmpty()
     curp: string;
+
+    @IsNotEmpty()
+    group: Group;
 
     @IsString()
     @IsNotEmpty()
