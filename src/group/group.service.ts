@@ -8,6 +8,7 @@ const prisma = new PrismaClient();
 
 @Injectable()
 export class GroupService {
+
   create(createGroupDto: CreateGroupDto) {
     return prisma.group.create({
       data: {
@@ -23,77 +24,62 @@ export class GroupService {
     });
   }
 
-  async verifySubjects(id: number) {
-    const group = prisma.group.findUnique({ where: { id } })
 
-    try {
-      const students = prisma.user.findMany({
-        where: {
-          groupID: group['id']
-        }
-      })
+  async getGroupSubjectsAndTeachers(groupId: number) {
+    const group = await prisma.group.findUnique({
+      where: { id: groupId },
+    });
 
-      const subjects = prisma.subject.findMany({
-        where: {
-          AND: [
-            { careerId: group['careerId'] },
-            { period: group['period'] }
-          ]
-        }
-      })
+    const subjects = await prisma.subject.findMany({
+      where: {
+        period: group.period,
+        careerId: group.careerId,
+      },
+    });
 
-      console.log(students, subjects);
+    const assignedTeachers = await prisma.score.findMany({
+      where: {
+        professorId: { not: undefined },
+        student: {
+          groupID: groupId,
+        },
+      },
+      select: {
+        professorId: true,
+        subjectId: true,
+      },
+    });
 
-      let count: number = 0;
+    const availableTeachers = await prisma.user.findMany({
+      where: {
+        id: { notIn: assignedTeachers.map((teacher) => teacher.professorId) },
+        roleID: 2,
+      },
+      select: {
+        id: true,
+        firstName: true,
+      },
+    });
 
-      //if it finds that the admin has already assigned the teachers it return the subjects and the 
-      //corresponding teachers. Otherwise it returns the subjects and all the teachers
+    const hasAssignedTeachers = assignedTeachers.length > 0;
 
-      const found = await prisma.score.count({ where: { AND: [{ groupID: id }, { subjectId: subjects[0].id }] } });
-
-      if (found > 0) {
-
-        const teachers = []
-
-        Object.entries(subjects).forEach(([key, value]) => {
-          let t = prisma.score.findFirst({ where: { AND: [{ groupID: id }, { subjectId: value.id }] } })['professorId']
-          teachers.push(prisma.user.findUnique({ where: { id: t } }))
-        })
-
-        return {
-          subjects: subjects,
-          teachers: teachers
-        }
-      }
-
-      return {
-        subjects: subjects,
-        teachers: prisma.user.findMany({ where: { AND: [{ roleID: 2 }] } })
-      }
-    }
-    catch (e) {
-      console.log(e)
-      return e;
-    }
-
+    return {
+      group,
+      teachers: hasAssignedTeachers ? assignedTeachers : availableTeachers,
+      subjects: subjects,
+    };
   }
 
-  teacherSubjects(id: number) {
-
-    const groups = []
-    let t = prisma.score.findFirst({ where: { AND: [{ groupID: id }, { subjectId: value.id }] } })
-
-    Object.entries(subjects).forEach(([key, value]) => {
-      if (groups.length) {
-
-      }
-      else {
-        groups.push(prisma.user.findUnique({ where: { id: t } }))
-      }
-
-    })
-
-    
+  async getTeacherSubjectsAndGroups(id: number) {
+    const groups = await prisma.group.findMany({
+      where: {
+        Score: {
+          some: {
+            professorId: id,
+          },
+        },
+      },
+    });
 
     return groups
   }

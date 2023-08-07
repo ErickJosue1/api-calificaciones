@@ -7,7 +7,7 @@ import { PrismaClientKnownRequestError } from "@prisma/client/runtime";
 import { JwtService } from "@nestjs/jwt";
 import { ConfigService } from "@nestjs/config";
 import { Console } from "console";
-
+import { Prisma, PrismaClient } from "@prisma/client";
 
 @Injectable()
 export class AuthService {
@@ -19,6 +19,9 @@ export class AuthService {
 
         const matricule = "000202020201";
 
+        console.log(dto)
+
+
         try {
             const user = await this.prisma.user.create({
                 data: {
@@ -28,18 +31,22 @@ export class AuthService {
                     curp: dto.curp,
                     matricule: matricule,
                     hash,
-                    group:{
-                        connect:{
-                            id: dto.group.id
+                    group: dto.group
+                        ? {
+                            connect: {
+                                id: dto.group.id,
+                            },
                         }
-                    },
+                        : undefined,
                     role: {
                         connect: {
                             id: dto.role.id,
-                        }
-                    }
-                },
-            })
+                        },
+                    },
+
+                }
+            });
+
 
             return this.signToken(user.id, user.email)
         } catch (error) {

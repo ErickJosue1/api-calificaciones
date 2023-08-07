@@ -12,15 +12,16 @@ export class GroupController {
     return this.groupService.create(createGroupDto);
   }
 
-  @Get('verify/:id')
-  verifySubjects(@Param('id') id: string) {
-    return this.groupService.verifySubjects(+id);
+  @Get(':groupId/subjectsAndTeachers')
+  async getGroupSubjectsAndTeachers(@Param('groupId') groupId: string) {
+    return this.groupService.getGroupSubjectsAndTeachers(+groupId);
   }
 
   @Get('teacher/:id')
   teacherSubjects(@Param('id') id: string) {
-    return this.groupService.teacherSubjects(+id);
+    return this.groupService.getTeacherSubjectsAndGroups(+id);
   }
+
 
   @Get()
   findAll() {

@@ -28,8 +28,8 @@ model User {
   lastName  String?
 
   // Relation with Group model (Just for students)
-  groupID Int
-  group   Group @relation(fields: [groupID], references: [id])
+  groupID Int? 
+  group   Group? @relation(fields: [groupID], references: [id])
 
   // Relation with Score model as a student
   scoresAsStudent Score[] @relation("StudentScores")
@@ -47,6 +47,7 @@ model Score {
   grade1    Float?
   grade2    Float?
   grade3    Float?
+  gradeF    Float?
 
   // Relation with Group model (Redundant but work for the moment)
   groupID Int

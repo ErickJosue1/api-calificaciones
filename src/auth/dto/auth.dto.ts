@@ -4,12 +4,17 @@ import {
     IsEmail,
     IsNotEmpty,
     IsString,
-    IsEnum 
+    IsEnum,
+    IsOptional
 } from 'class-validator';
 
 
 
 export class AuthDto {
+    
+    @IsOptional()
+    group: Group;
+
     @IsEmail()
     @IsNotEmpty()
     email: string;
@@ -31,13 +36,13 @@ export class AuthDto {
     password: string;
 
     @IsNotEmpty()
-    group: Group;
-
-    @IsNotEmpty()
     role: Role;
 }
 
 export class UpdateUserDto {
+    
+    @IsOptional()
+    group: Group;
 
     @IsNotEmpty()
     @IsString()
@@ -51,8 +56,6 @@ export class UpdateUserDto {
     @IsNotEmpty()
     curp: string;
 
-    @IsNotEmpty()
-    group: Group;
 
     @IsString()
     @IsNotEmpty()
