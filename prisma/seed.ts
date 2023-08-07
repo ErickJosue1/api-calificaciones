@@ -32,7 +32,7 @@ async function main() {
   const hash = await argon.hash("12345");
 
 
-  /*  try {
+  try {
      await prisma.user.create({
        data: {
          email: "tu_gfa_1166@hotmail.com",
@@ -54,7 +54,7 @@ async function main() {
      }
      throw error
    }
-  */
+  
 
   for (const role of roles) {
     await prisma.role.create({ data: { name: role } });
