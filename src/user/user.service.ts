@@ -16,8 +16,8 @@ export class UserService {
 
     async renapoService(curp: string) {
         try {
-            const response = await axios.get(`https://curpws.bienestar.gob.mx/ServiceCurpPro/ConsultaPor/Curp/`+curp);
-            
+            const response = await axios.get(`https://curpws.bienestar.gob.mx/ServiceCurpPro/ConsultaPor/Curp/` + curp);
+
             const data = response.data;
             console.log(data)
             console.log(curp)
@@ -47,11 +47,35 @@ export class UserService {
         return this.prisma.user.findMany({ include: { role: true }, });
     }
 
-    async updateUser(id: number, updateUserDto: UpdateUserDto): Promise<User> {
-        const { firstName, password } = updateUserDto;
+    async updateUser(id: number, dto: UpdateUserDto): Promise<User> {
+        const { password } = dto;
         const hash = await argon.hash(password);
 
-        return this.prisma.user.update({ where: { id }, data: { firstName, hash } });
+        const matricule = "000202020201";
+
+
+        return this.prisma.user.update({
+            where: { id }, data: {
+                email: dto.email,
+                firstName: dto.firstName,
+                lastName: dto.lastName,
+                curp: dto.curp,
+                matricule: matricule,
+                hash,
+                group: dto.group
+                    ? {
+                        connect: {
+                            id: dto.group.id,
+                        },
+                    }
+                    : undefined,
+                role: {
+                    connect: {
+                        id: dto.role.id,
+                    },
+                },
+            }
+        });
     }
 
     async deleteUser(id: number): Promise<void> {
