@@ -24,8 +24,8 @@ export class UserController {
 
     @Get(':id')
     @Roles('ADMIN')
-    getUser(@Param('id') id: number) {
-        return this.userService.getUser(id);
+    getUser(@Param('id') id: string) {
+        return this.userService.getUser(+id);
     }
 
 
@@ -41,8 +41,9 @@ export class UserController {
         console.log(curp)
         return this.userService.renapoService(curp);
     }
+
     @Get('me')
-    getMe(@GetUser() user: User, @GetUser('id') id: string) {
+    getMe(@GetUser() user: User) {
 
         const f_user = this.prisma.user.findUnique({
             where: {
