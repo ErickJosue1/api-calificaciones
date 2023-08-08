@@ -10,6 +10,9 @@ import { UpdateUserDto } from 'src/auth/dto';
 import { Roles } from 'src/auth/decorator/roles.decorator';
 import { PrismaService } from 'src/prisma/prisma.service';
 
+interface RequestWithUser extends Request {
+    user: User; 
+  }
 
 @UseGuards(JwtGuard, RolesGuard)
 @Controller('users')
@@ -22,7 +25,7 @@ export class UserController {
         return this.userService.getAllUsers();
     }
 
-    @Get(':id')
+    @Get(':id/only')
     @Roles('ADMIN')
     getUser(@Param('id') id: string) {
         return this.userService.getUser(+id);
@@ -42,8 +45,18 @@ export class UserController {
         return this.userService.renapoService(curp);
     }
 
+    @Get('profile')
+    async getUserProfile(@Req() request: RequestWithUser) {
+      // The user information can be accessed from the request object
+      const user = request.user;
+  
+      return user;
+    }
+
     @Get('me')
-    getMe(@GetUserMe() user: User) {
+    getMe(@GetUserMe() user: User, @GetUserMe('id') id: string) {
+
+        console.log('me')
 
         const f_user = this.prisma.user.findUnique({
             where: {
