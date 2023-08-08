@@ -2,7 +2,7 @@ import { Controller, Get, Req, UseGuards, Put, Body, Param, Delete, Headers } fr
 import { AuthGuard } from '@nestjs/passport';
 import { User } from '@prisma/client';
 import { Request } from 'express';
-import { GetUser } from 'src/auth/decorator/get-user.decorator';
+import { GetUserMe } from 'src/auth/decorator/get-user.decorator';
 import { JwtGuard } from 'src/auth/guard';
 import { RolesGuard } from 'src/auth/guard/role.guard';
 import { UserService } from './user.service';
@@ -43,7 +43,7 @@ export class UserController {
     }
 
     @Get('me')
-    getMe(@GetUser() user: User) {
+    getMe(@GetUserMe() user: User) {
 
         const f_user = this.prisma.user.findUnique({
             where: {
