@@ -12,7 +12,7 @@ export class UpdateUserDto {
     @IsOptional()
     group: Group;
 
-    @IsNotEmpty()
+    @IsOptional()
     @IsString()
     password: string;
 
@@ -24,7 +24,6 @@ export class UpdateUserDto {
     @IsNotEmpty()
     curp: string;
 
-
     @IsString()
     @IsNotEmpty()
     lastName: string;
@@ -33,6 +32,7 @@ export class UpdateUserDto {
     @IsNotEmpty()
     email: string;
 
+    @IsOptional()
     @IsNotEmpty()
     role: Role;
 }

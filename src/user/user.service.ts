@@ -49,12 +49,13 @@ export class UserService {
 
     async updateUser(id: number, dto: UpdateUserDto): Promise<User> {
         const { password } = dto;
-        const hash = await argon.hash(password);
+
+        const hash = password ? await argon.hash(password) : null;
 
         const matricule = "000202020201";
 
 
-        return this.prisma.user.update({
+        return hash ? this.prisma.user.update({
             where: { id }, data: {
                 email: dto.email,
                 firstName: dto.firstName,
@@ -62,6 +63,26 @@ export class UserService {
                 curp: dto.curp,
                 matricule: matricule,
                 hash,
+                group: dto.group
+                    ? {
+                        connect: {
+                            id: dto.group.id,
+                        },
+                    }
+                    : undefined,
+                role: {
+                    connect: {
+                        id: dto.role.id,
+                    },
+                },
+            }
+        }) : this.prisma.user.update({
+            where: { id }, data: {
+                email: dto.email,
+                firstName: dto.firstName,
+                lastName: dto.lastName,
+                curp: dto.curp,
+                matricule: matricule,
                 group: dto.group
                     ? {
                         connect: {
