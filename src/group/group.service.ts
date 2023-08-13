@@ -93,6 +93,8 @@ export class GroupService {
   }
 
   update(id: number, updateGroupDto: UpdateGroupDto) {
+
+    console.log('uwu')
     return prisma.group.update({
       where: { id }, data: {
         name: updateGroupDto.name,
