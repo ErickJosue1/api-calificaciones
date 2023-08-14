@@ -24,8 +24,8 @@ export class GroupController {
   }
 
   @Get('/by-career/:careerId')
-  async getGroupsByCareer(@Param('careerId') careerId: number): Promise<Group[]> {
-    return this.groupService.getAllGroupsByCareer(careerId);
+  async getGroupsByCareer(@Param('careerId') careerId: string): Promise<Group[]> {
+    return this.groupService.getAllGroupsByCareer(+careerId);
   }
 
 
