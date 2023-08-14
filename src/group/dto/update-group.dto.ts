@@ -9,7 +9,6 @@ export class UpdateGroupDto {
     @IsNotEmpty()
     name: string;
 
-    @IsInt()
     @IsNotEmpty()
     careerId: number;
   
