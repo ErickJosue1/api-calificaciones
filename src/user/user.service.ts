@@ -19,8 +19,7 @@ export class UserService {
             const response = await axios.get(`https://curpws.bienestar.gob.mx/ServiceCurpPro/ConsultaPor/Curp/` + curp);
 
             const data = response.data;
-            console.log(data)
-            console.log(curp)
+          
             return data;
         } catch (error) {
             console.error(error);

@@ -41,7 +41,6 @@ export class UserController {
 
     @Get('curp/:curp')
     renapoService(@Param('curp') curp: string) {
-        console.log(curp)
         return this.userService.renapoService(curp);
     }
 
@@ -56,7 +55,6 @@ export class UserController {
     @Get('me')
     getMe(@GetUserMe() user: User, @GetUserMe('id') id: string) {
 
-        console.log('me')
 
         const f_user = this.prisma.user.findUnique({
             where: {

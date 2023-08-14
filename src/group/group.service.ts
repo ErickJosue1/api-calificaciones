@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { CreateGroupDto } from './dto/create-group.dto';
 import { UpdateGroupDto } from './dto/update-group.dto';
-import { PrismaClient } from '@prisma/client';
+import { Group, PrismaClient } from '@prisma/client';
 import { Role } from '@prisma/client';
+import { error } from 'console';
 
 const prisma = new PrismaClient();
 
@@ -22,6 +23,19 @@ export class GroupService {
         }
       }
     });
+  }
+
+  async getAllGroupsByCareer(careerId: number): Promise<Group[]> {
+    const career = await prisma.career.findUnique({
+      where: { id: careerId },
+      include: { groups: true },
+    });
+
+    if (!career) {
+      throw error(`Career with id ${careerId} not found`);
+    }
+
+    return career.groups;
   }
 
 
@@ -94,7 +108,6 @@ export class GroupService {
 
   update(id: number, updateGroupDto: UpdateGroupDto) {
 
-    console.log('uwu')
     return prisma.group.update({
       where: { id }, data: {
         name: updateGroupDto.name,

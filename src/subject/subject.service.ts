@@ -2,36 +2,34 @@ import { Injectable } from '@nestjs/common';
 import { CreateSubjectDto } from './dto/create-subject.dto';
 import { UpdateSubjectDto } from './dto/update-subject.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { error } from 'console';
 
 @Injectable()
 export class SubjectService {
-  constructor(private prisma: PrismaService){}
+  constructor(private readonly prisma: PrismaService) { }
 
-  create(createSubjectDto: CreateSubjectDto) {
-    return 'This action adds a new subject';
+  async getAllSubjects() {
+    return this.prisma.subject.findMany();
   }
 
-  findAll() {
-    return `This action returns all subject`;
+  async createSubject(createSubjectDto: CreateSubjectDto) {
+    return this.prisma.subject.create({
+      data: createSubjectDto,
+    });
   }
 
-  getSubjectStudents(id: number){
-    let users = this.prisma.subject.findMany({
-      where: {
-      }
-    })
-    
+  async updateSubject(id: number, updateSubjectDto: UpdateSubjectDto) {
+    const subject = await this.prisma.subject.findUnique({ where: { id } });
+    if (!subject) {
+      throw error(`Subject with id ${id} not found`);
+    }
+    return this.prisma.subject.update({
+      where: { id },
+      data: updateSubjectDto,
+    });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} subject`;
-  }
-
-  update(id: number, updateSubjectDto: UpdateSubjectDto) {
-    return `This action updates a #${id} subject`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} subject`;
+  async deleteSubject(id: number) {
+    return this.prisma.subject.delete({ where: { id } });
   }
 }

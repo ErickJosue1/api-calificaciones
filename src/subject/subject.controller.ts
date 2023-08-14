@@ -9,26 +9,26 @@ export class SubjectController {
 
   @Post()
   create(@Body() createSubjectDto: CreateSubjectDto) {
-    return this.subjectService.create(createSubjectDto);
+    return this.subjectService.createSubject(createSubjectDto);
   }
 
   @Get()
   findAll() {
-    return this.subjectService.findAll();
+    return this.subjectService.getAllSubjects();
   }
 
-  @Get(':id')
+ /*  @Get(':id')
   findOne(@Param('id') id: string) {
     return this.subjectService.findOne(+id);
-  }
+  } */
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateSubjectDto: UpdateSubjectDto) {
-    return this.subjectService.update(+id, updateSubjectDto);
+    return this.subjectService.updateSubject(+id, updateSubjectDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.subjectService.remove(+id);
+    return this.subjectService.deleteSubject(+id);
   }
 }

@@ -2,6 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { GroupService } from './group.service';
 import { CreateGroupDto } from './dto/create-group.dto';
 import { UpdateGroupDto } from './dto/update-group.dto';
+import { Group } from '@prisma/client';
 
 @Controller('group')
 export class GroupController {
@@ -20,6 +21,11 @@ export class GroupController {
   @Get('teacher/:id')
   teacherSubjects(@Param('id') id: string) {
     return this.groupService.getTeacherSubjectsAndGroups(+id);
+  }
+
+  @Get('/by-career/:careerId')
+  async getGroupsByCareer(@Param('careerId') careerId: number): Promise<Group[]> {
+    return this.groupService.getAllGroupsByCareer(careerId);
   }
 
 

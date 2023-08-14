@@ -32,6 +32,27 @@ async function main() {
   for (const role of roles) {
     await prisma.role.create({ data: { name: role } });
   }
+
+  const hash = await argon.hash('Password');
+
+  await this.prisma.user.create({
+    data: {
+      email: 'admin@gmail.com',
+      firstName: 'Admin',
+      lastName: 'uwu',
+      curp: 'GOPE011110HNEMNRA8',
+      matricule: '000202020201',
+      hash,
+      group: undefined,
+      role: {
+        connect: {
+          id: 3,
+        },
+      },
+
+    }
+  });
+
 }
 
 async function seedSubjects() {

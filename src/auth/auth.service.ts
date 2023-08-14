@@ -19,7 +19,6 @@ export class AuthService {
 
         const matricule = "000202020201";
 
-        console.log(dto)
 
 
         try {
