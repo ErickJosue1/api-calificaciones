@@ -123,7 +123,7 @@ export class GroupService {
 
   update(id: number, updateGroupDto: UpdateGroupDto) {
 
-    return prisma.group.update({
+    return updateGroupDto.careerId > 15 ? error('Period cannot be grater than 15 (Depend of the career you may have made a mistake)') : prisma.group.update({
       where: { id }, data: {
         name: updateGroupDto.name,
         period: updateGroupDto.period,
