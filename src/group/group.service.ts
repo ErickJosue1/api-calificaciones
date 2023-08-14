@@ -96,6 +96,7 @@ export class GroupService {
       group,
       teachers: hasAssignedTeachers ? assignedTeachers : availableTeachers,
       subjects: subjects,
+      isAssigned: hasAssignedTeachers ? true : false
     };
   }
 
