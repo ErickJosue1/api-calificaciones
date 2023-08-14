@@ -130,7 +130,7 @@ export class GroupService {
         year: updateGroupDto.year,
         career: {
           connect: {
-            id: updateGroupDto.career.id
+            id: updateGroupDto.careerId
           }
         }
       }

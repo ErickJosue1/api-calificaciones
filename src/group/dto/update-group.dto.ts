@@ -4,13 +4,14 @@ import { IsString, IsNotEmpty, IsInt, Min } from 'class-validator';
 import { Career } from '@prisma/client';
 
 
-export class UpdateGroupDto extends PartialType(CreateGroupDto) {
+export class UpdateGroupDto {
     @IsString()
     @IsNotEmpty()
     name: string;
 
+    @IsInt()
     @IsNotEmpty()
-    career: Career;
+    careerId: number;
   
     @IsInt()
     @Min(1)
