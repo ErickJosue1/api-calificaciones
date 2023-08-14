@@ -38,6 +38,21 @@ export class GroupService {
     return career.groups;
   }
 
+  async getGroupStudents(groupId: number) {
+    const career = await prisma.group.findUnique({
+      where: { id: groupId },
+      include: { User: true },
+    });
+
+    if (!career) {
+      throw error(`Career with id ${groupId} not found`);
+    }
+
+    return career.User;
+  }
+
+
+
 
   async getGroupSubjectsAndTeachers(groupId: number) {
     const group = await prisma.group.findUnique({

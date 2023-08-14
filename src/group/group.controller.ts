@@ -18,6 +18,12 @@ export class GroupController {
     return this.groupService.getGroupSubjectsAndTeachers(+groupId);
   }
 
+  @Get(':groupId/Students')
+  async getGroupStudents(@Param('groupId') groupId: string) {
+    return this.groupService.getGroupSubjectsAndTeachers(+groupId);
+  }
+
+
   @Get('teacher/:id')
   teacherSubjects(@Param('id') id: string) {
     return this.groupService.getTeacherSubjectsAndGroups(+id);
