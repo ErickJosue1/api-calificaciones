@@ -107,6 +107,8 @@ export class ScoreService {
       },
     });
 
+    console.log(current)
+
     const finsihed = prisma.score.findMany({
       where: {
          gradeF: {
