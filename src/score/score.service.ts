@@ -9,9 +9,9 @@ const prisma = new PrismaClient();
 @Injectable()
 export class ScoreService {
 
-  async createGroupScores(groupId: number, subjectTeachers: { subjectId: number; teacherId: number }[]) {
+  async createGroupScores(groupId: number, subjectTeachers: { data: { subjectId: number; teacherId: number }[] }) {
     console.log(subjectTeachers)
-    
+
     const group = await prisma.group.findUnique({
       where: { id: groupId },
       include: { User: true },
@@ -20,7 +20,7 @@ export class ScoreService {
     const scoresData = [];
 
     for (const student of group.User) {
-      for (const subjectTeacher of subjectTeachers) {
+      for (const subjectTeacher of subjectTeachers.data) {
         scoresData.push({
           studentId: student.id,
           professorId: subjectTeacher.teacherId,
