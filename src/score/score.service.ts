@@ -98,7 +98,6 @@ export class ScoreService {
     const current = prisma.score.findMany({
       where: {
         studentId: id,
-        gradeF: undefined
       },
       include: {
         subject: true,
