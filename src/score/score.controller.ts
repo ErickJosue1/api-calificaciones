@@ -1,13 +1,18 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Put } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Put, Req } from '@nestjs/common';
 import { ScoreService } from './score.service';
 import { CreateScoreDto } from './dto/create-score.dto';
 import { UpdateScoreDto } from './dto/update-score.dto';
+import { Score, User } from '@prisma/client';
+
+interface RequestWithUser extends Request {
+  user: User;
+}
 
 @Controller('score')
 export class ScoreController {
-  constructor(private readonly scoreService: ScoreService) {}
+  constructor(private readonly scoreService: ScoreService) { }
 
-  
+
   @Post(':groupId/createScores')
   async createGroupScores(@Param('groupId') groupId: string, @Body() subjectTeachers: { data: { subjectId: number; teacherId: string }[] }) {
     return this.scoreService.createGroupScores(+groupId, subjectTeachers);
@@ -22,6 +27,12 @@ export class ScoreController {
   findAll() {
     return this.scoreService.findAll();
   }
+
+  @Get('groupscores')
+  getTeacherStudentsScore(@Req() req) {
+    return this.scoreService.getStudentScores(req.user.id);
+  }
+
 
   @Get(':id/student')
   getStudentScores(@Param('id') id: string) {
@@ -43,4 +54,6 @@ export class ScoreController {
   remove(@Param('id') id: string) {
     return this.scoreService.remove(+id);
   }
+
+  //p
 }

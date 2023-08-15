@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CreateScoreDto } from './dto/create-score.dto';
 import { UpdateScoreDto } from './dto/update-score.dto';
-import { Prisma, PrismaClient } from '@prisma/client';
+import { Prisma, PrismaClient, Score, User } from '@prisma/client';
 import { error } from 'console';
 import { throwError } from 'rxjs';
 
@@ -100,6 +100,23 @@ export class ScoreService {
 
   findOne(id: number) {
     return `This action returns a #${id} score`;
+  }
+
+  async getTeacherStudentsScore(id: number, user: User) {
+
+  }
+
+  async getTeacherStudentsRecords(teacherId: number): Promise<Score[]> {
+    return prisma.score.findMany({
+      where: {
+        professorId: teacherId,
+        gradeF: undefined
+      },
+      include: {
+        student: true,
+        subject: true,
+      },
+    });
   }
 
   async getStudentScores(id: number) {
