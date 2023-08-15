@@ -100,7 +100,7 @@ export class ScoreService {
 
     const student = await prisma.user.findUnique({
       where: { id: id },
-      include: { scoresAsStudent: { include: { subject: { select: { name: true } } } } },
+      include: { scoresAsStudent: { include: { subject: { select: { name: true } }, professor: { select: { firstName: true, lastName: true } } } } },
     });
 
     if (!student) {
