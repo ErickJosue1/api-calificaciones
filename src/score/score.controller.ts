@@ -29,7 +29,7 @@ export class ScoreController {
   }
 
   @Get(':id/groupscores')
-  getTeacherStudentsScore(@Req() req, @Param('id') id: string) {
+  getTeacherStudentsScore(@Param('id') id: string, @Req() req) {
     return this.scoreService.getTeacherStudentsRecords(req.user.id, +id);
   }
 
