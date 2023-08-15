@@ -39,7 +39,7 @@ export class ScoreService {
       return prisma.score.createMany({ data: scoresData });
     }
     else{
-      return error("No existen alumnos asigandos al grupo!")
+      throw error("No existen alumnos asigandos al grupo!")
     }
 
 
