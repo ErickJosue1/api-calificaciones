@@ -9,8 +9,8 @@ export class ScoreController {
 
   
   @Post(':groupId/createScores')
-  async createGroupScores(@Param('groupId') groupId: number, @Body() subjectTeachers: { subjectId: number; teacherId: number }[]) {
-    return this.scoreService.createGroupScores(groupId, subjectTeachers);
+  async createGroupScores(@Param('groupId') groupId: string, @Body() subjectTeachers: { subjectId: number; teacherId: number }[]) {
+    return this.scoreService.createGroupScores(+groupId, subjectTeachers);
   }
 
   @Put(':groupId/students/scores')
