@@ -3,6 +3,7 @@ import { CreateScoreDto } from './dto/create-score.dto';
 import { UpdateScoreDto } from './dto/update-score.dto';
 import { Prisma, PrismaClient } from '@prisma/client';
 import { error } from 'console';
+import { throwError } from 'rxjs';
 
 const prisma = new PrismaClient();
 
@@ -18,22 +19,29 @@ export class ScoreService {
       include: { User: true },
     });
 
-    const scoresData: Prisma.ScoreCreateManyInput[] = [];
+    if (group.User) {
+      const scoresData: Prisma.ScoreCreateManyInput[] = [];
 
-    for (const student of group.User) {
-      for (const subjectTeacher of subjectTeachers.data) {
-        const newData: Prisma.ScoreCreateManyInput = {
-          studentId: student.id,
-          professorId: +subjectTeacher.teacherId,
-          groupID: groupId,
-          subjectId: subjectTeacher.subjectId
-        };
+      for (const student of group.User) {
+        for (const subjectTeacher of subjectTeachers.data) {
+          const newData: Prisma.ScoreCreateManyInput = {
+            studentId: student.id,
+            professorId: +subjectTeacher.teacherId,
+            groupID: groupId,
+            subjectId: subjectTeacher.subjectId
+          };
 
-        scoresData.push(newData)
+          scoresData.push(newData)
+        }
       }
+
+      return prisma.score.createMany({ data: scoresData });
+    }
+    else{
+      return error("No existen alumnos asigandos al grupo!")
     }
 
-    return prisma.score.createMany({ data: scoresData });
+
   }
 
   async getStudentsScoresForGroupAndSubject(groupId: number, subjectId: number) {
@@ -47,8 +55,6 @@ export class ScoreService {
       },
     });
   }
-
-
 
   async updateStudentScores(groupScores: { scoreId: number; grade: number }[]) {
     const updatedScores: Prisma.ScoreUpdateManyMutationInput[] = [];
