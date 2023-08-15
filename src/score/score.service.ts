@@ -62,11 +62,16 @@ export class ScoreService {
         } else if (!score.grade3) {
           gradingProgress = 3;
         }
+        else if (!score.gradeF) {
+          gradingProgress = 4;
+        }
 
         const updateData: Prisma.ScoreUpdateManyMutationInput = {
           grade1: gradingProgress == 1 ? grade : score.grade1,
           grade2: gradingProgress == 2 ? grade : score.grade2,
           grade3: gradingProgress == 3 ? grade : score.grade3,
+          gradeF: gradingProgress == 4 ? (score.grade1 + score.grade2 + score.grade3) / 3
+            : score.gradeF,
         };
 
         updatedScores.push(updateData);
@@ -77,7 +82,7 @@ export class ScoreService {
   }
 
   findAll() {
-    return `This action returns all score`;
+    return prisma.score.findMany();
   }
 
   findOne(id: number) {
@@ -85,15 +90,35 @@ export class ScoreService {
   }
 
   getStudentScores(id: number) {
-    return prisma.score.findMany({
+    const current = prisma.score.findMany({
       where: {
-        studentId: id
+        studentId: id,
+        gradeF: null
       },
       include: {
         subject: true,
         professor: true
       },
     });
+
+    const finsihed = prisma.score.findMany({
+      where: {
+        studentId: id,
+        gradeF: {
+          not: null
+        }
+      },
+      include: {
+        subject: true,
+        professor: true
+      },
+    });
+
+    return {
+      current: current,
+      finsihed: finsihed
+    }
+
   }
 
   update(id: number, updateScoreDto: UpdateScoreDto) {
