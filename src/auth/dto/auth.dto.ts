@@ -44,6 +44,7 @@ export class UpdateUserDto {
     @IsOptional()
     group: Group;
 
+    @IsOptional()
     @IsString()
     password: string;
 

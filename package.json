@@ -10,7 +10,7 @@
     "db:dev:up": "docker compose up postgres -d",
     "prisma:dev:deploy": "prisma migrate deploy",
     "db:dev:restart": "npm run db:dev:rm && npm run db:dev:up && npm run prisma:dev:deploy",
-    "build": "prisma db push --force-reset && npx prisma db seed && nest build",
+    "build": "npx prisma migrate && nest build",
     "build3": "prisma db push --force-reset && npx prisma db seed && nest build",
     "build2": "npx prisma migrate && npx prisma db seed && nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
