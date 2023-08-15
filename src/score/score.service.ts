@@ -18,6 +18,7 @@ export class ScoreService {
       where: { id: groupId },
       include: { User: true },
     });
+    console.log(group.User)
 
     if (group.User.length > 0) {
       const scoresData: Prisma.ScoreCreateManyInput[] = [];
