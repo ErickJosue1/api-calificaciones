@@ -17,15 +17,18 @@ export class ScoreService {
       include: { User: true },
     });
 
-    const scoresData = [];
+    const scoresData: Prisma.ScoreCreateManyInput[] = [];
 
     for (const student of group.User) {
       for (const subjectTeacher of subjectTeachers.data) {
-        scoresData.push({
+        const newData: Prisma.ScoreCreateManyInput = {
           studentId: student.id,
           professorId: subjectTeacher.teacherId,
-          subjectId: subjectTeacher.subjectId,
-        });
+          groupID: groupId,
+          subjectId: subjectTeacher.subjectId
+        };
+
+        scoresData.push(newData)
       }
     }
 
