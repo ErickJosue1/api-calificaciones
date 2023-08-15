@@ -84,6 +84,18 @@ export class ScoreService {
     return `This action returns a #${id} score`;
   }
 
+  getStudentScores(id: number) {
+    return prisma.score.findMany({
+      where: {
+        studentId: id
+      },
+      include: {
+        subject: true,
+        professor: true
+      },
+    });
+  }
+
   update(id: number, updateScoreDto: UpdateScoreDto) {
     return `This action updates a #${id} score`;
   }

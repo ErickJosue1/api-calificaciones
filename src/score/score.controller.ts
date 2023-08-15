@@ -23,6 +23,12 @@ export class ScoreController {
     return this.scoreService.findAll();
   }
 
+  @Get(':id/student')
+  getStudentScores(@Param('id') id: string) {
+    return this.scoreService.getStudentScores(+id);
+  }
+
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.scoreService.findOne(+id);
