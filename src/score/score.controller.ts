@@ -28,9 +28,9 @@ export class ScoreController {
     return this.scoreService.findAll();
   }
 
-  @Get('groupscores')
-  getTeacherStudentsScore(@Req() req) {
-    return this.scoreService.getStudentScores(req.user.id);
+  @Get(':id/groupscores')
+  getTeacherStudentsScore(@Req() req, @Param('id') id: string) {
+    return this.scoreService.getTeacherStudentsRecords(req.user.id, +id);
   }
 
 

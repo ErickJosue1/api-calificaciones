@@ -106,11 +106,12 @@ export class ScoreService {
 
   }
 
-  async getTeacherStudentsRecords(teacherId: number): Promise<Score[]> {
+  async getTeacherStudentsRecords(teacherId: number, groupId: number): Promise<Score[]> {
     return prisma.score.findMany({
       where: {
         professorId: teacherId,
-        gradeF: undefined
+        gradeF: undefined,
+        groupID: groupId
       },
       include: {
         student: true,
