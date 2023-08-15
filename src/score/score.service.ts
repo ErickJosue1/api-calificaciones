@@ -19,7 +19,7 @@ export class ScoreService {
       include: { User: true },
     });
 
-    if (group.User) {
+    if (group.User.length > 0) {
       const scoresData: Prisma.ScoreCreateManyInput[] = [];
 
       for (const student of group.User) {
