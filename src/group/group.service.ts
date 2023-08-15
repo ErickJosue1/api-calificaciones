@@ -74,14 +74,18 @@ export class GroupService {
         },
       },
       select: {
-        professorId: true,
-        subjectId: true,
+        professor: {
+          select: {
+            id: true,
+            firstName: true
+          }
+        }
       },
     });
 
     const availableTeachers = await prisma.user.findMany({
       where: {
-        id: { notIn: assignedTeachers.map((teacher) => teacher.professorId) },
+        id: { notIn: assignedTeachers.map((teacher) => teacher.professor.id) },
         roleID: 2,
       },
       select: {
