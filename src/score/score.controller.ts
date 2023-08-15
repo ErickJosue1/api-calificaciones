@@ -28,10 +28,12 @@ export class ScoreController {
     return this.scoreService.findAll();
   }
 
-  @Get(':id/groupscores')
-  getTeacherStudentsScore(@Param('id') id: string, @Req() req) {
-    console.log(req.user,'+',id)
-    return this.scoreService.getTeacherStudentsRecords(req.user.id, +id);
+  @Get('teacher/:teacherId/groupscores/:id')
+  getTeacherStudentsScore(@Param('id') id: string, @Param('teacherId') teacherId: string) {
+    
+    console.log(teacherId, '+', id)
+
+    return this.scoreService.getTeacherStudentsRecords(+teacherId, +id);
   }
 
 
