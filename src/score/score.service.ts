@@ -10,6 +10,8 @@ const prisma = new PrismaClient();
 export class ScoreService {
 
   async createGroupScores(groupId: number, subjectTeachers: { subjectId: number; teacherId: number }[]) {
+    console.log(subjectTeachers)
+    
     const group = await prisma.group.findUnique({
       where: { id: groupId },
       include: { User: true },
