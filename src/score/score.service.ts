@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateScoreDto } from './dto/create-score.dto';
 import { UpdateScoreDto } from './dto/update-score.dto';
 import { Prisma, PrismaClient } from '@prisma/client';
+import { error } from 'console';
 
 const prisma = new PrismaClient();
 
@@ -94,39 +95,25 @@ export class ScoreService {
     return `This action returns a #${id} score`;
   }
 
-  getStudentScores(id: number) {
-    const current = prisma.score.findMany({
-      where: {
-        student: {
-          id: id
-        }
-      },
-      include: {
-        subject: true,
-        professor: true
-      },
+  async getStudentScores(id: number) {
+    console.log(id)
+
+    const student = await prisma.user.findUnique({
+      where: { id: id },
+      include: { scoresAsStudent: true }, // Include related scores
     });
 
-    const finsihed = prisma.score.findMany({
-      where: {
-         gradeF: {
-          not: undefined
-        },
-        student: {
-          id: id
-        }
-       
-      },
-      include: {
-        subject: true,
-        professor: true
-      },
-    });
-
-    return {
-      current: current,
-      finsihed: finsihed
+    if (!student) {
+      throw error(`Student with id ${id} not found`);
     }
+
+    const scores = student.scoresAsStudent;
+
+    const currentScores = scores.filter(score => score.gradeF === null);
+    const finishedScores = scores.filter(score => score.gradeF !== null);
+
+    return { currentScores, finishedScores };
+
 
   }
 

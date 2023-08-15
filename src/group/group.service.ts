@@ -74,6 +74,7 @@ export class GroupService {
         },
       },
       select: {
+        subjectId: true,
         professor: {
           select: {
             id: true,
