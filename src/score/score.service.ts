@@ -97,7 +97,9 @@ export class ScoreService {
   getStudentScores(id: number) {
     const current = prisma.score.findMany({
       where: {
-        studentId: id,
+        student: {
+          id: id
+        }
       },
       include: {
         subject: true,
@@ -107,10 +109,13 @@ export class ScoreService {
 
     const finsihed = prisma.score.findMany({
       where: {
-        studentId: id,
-        gradeF: {
+         gradeF: {
           not: undefined
+        },
+        student: {
+          id: id
         }
+       
       },
       include: {
         subject: true,
