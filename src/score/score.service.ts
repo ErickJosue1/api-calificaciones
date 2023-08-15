@@ -58,6 +58,7 @@ export class ScoreService {
   }
 
   async updateStudentScores(groupScores: { scoreId: number; grade: number }[]) {
+    console.log(groupScores)
     const updatedScores: Prisma.ScoreUpdateManyMutationInput[] = [];
     const scoreIds = groupScores.map((scoreData) => scoreData.scoreId);
 
@@ -110,7 +111,7 @@ export class ScoreService {
     return prisma.score.findMany({
       where: {
         professorId: teacherId,
-        gradeF: undefined,
+        gradeF: null,
         groupID: groupId
       },
       include: {
