@@ -58,9 +58,8 @@ export class ScoreService {
   }
 
   async updateStudentScores(groupScores: { scoreId: number; grade: number }[]) {
-    console.log(groupScores[0])
-    console.log(groupScores[0].scoreId)
-    console.log(groupScores[0]['scoreId'])
+    console.log(groupScores['groupScores']['scoreId'])
+
 
     const updatedScores: Prisma.ScoreUpdateManyMutationInput[] = [];
     const scoreIds = groupScores[0].scoreId;
