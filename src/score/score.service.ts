@@ -80,6 +80,8 @@ export class ScoreService {
         gradingProgress = 4;
       }
 
+      console.log(gradingProgress)
+
       const updateData: Prisma.ScoreUpdateInput = {
         grade1: gradingProgress == 1 ? grade : score.grade1,
         grade2: gradingProgress == 2 ? grade : score.grade2,
@@ -91,6 +93,7 @@ export class ScoreService {
       updatedScores.push(updateData);
     }
 
+    console.log(updatedScores[0])
 
     return prisma.score.update({ where: { id: groupScores.scoreId }, data: updatedScores[0] });
   }
