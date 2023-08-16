@@ -19,7 +19,7 @@ export class ScoreController {
   }
 
   @Put(':groupId/students/scores')
-  async updateStudentScores(@Body() groupScores: { scoreId: number; grade: number }[]) {
+  async updateStudentScores(@Body() groupScores: { scoreId: number; grade: number }) {
     return this.scoreService.updateStudentScores(groupScores);
   }
 
@@ -30,7 +30,7 @@ export class ScoreController {
 
   @Get('teacher/:teacherId/groupscores/:id')
   getTeacherStudentsScore(@Param('id') id: string, @Param('teacherId') teacherId: string) {
-    
+
     console.log(teacherId, '+', id)
 
     return this.scoreService.getTeacherStudentsRecords(+teacherId, +id);

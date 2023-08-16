@@ -57,46 +57,43 @@ export class ScoreService {
     });
   }
 
-  async updateStudentScores(groupScores: { scoreId: number; grade: number }[]) {
+  async updateStudentScores(groupScores: { scoreId: number; grade: number }) {
 
     const updatedScores: Prisma.ScoreUpdateManyMutationInput[] = [];
-    let scoreIds: number = 0;
-
-    for (const scoreData of groupScores) {
-      scoreIds = scoreData.scoreId;
-      console.log(scoreData)
-    }
+    const scoreIds = groupScores.scoreId;
 
 
-    for (const gradeData of groupScores) {
-      const { scoreId, grade } = gradeData;
-      const score = await prisma.score.findUnique({ where: { id: scoreId } });
 
-      if (score) {
-        let gradingProgress = 1;
 
-        if (!score.grade1) {
-          gradingProgress = 1;
-        } else if (!score.grade2) {
-          gradingProgress = 2;
-        } else if (!score.grade3) {
-          gradingProgress = 3;
-        }
-        else if (!score.gradeF) {
-          gradingProgress = 4;
-        }
 
-        const updateData: Prisma.ScoreUpdateManyMutationInput = {
-          grade1: gradingProgress == 1 ? grade : score.grade1,
-          grade2: gradingProgress == 2 ? grade : score.grade2,
-          grade3: gradingProgress == 3 ? grade : score.grade3,
-          gradeF: gradingProgress == 4 ? (score.grade1 + score.grade2 + score.grade3) / 3
-            : score.gradeF,
-        };
+    const { scoreId, grade } = groupScores;
+    const score = await prisma.score.findUnique({ where: { id: scoreId } });
 
-        updatedScores.push(updateData);
+    if (score) {
+      let gradingProgress = 1;
+
+      if (!score.grade1) {
+        gradingProgress = 1;
+      } else if (!score.grade2) {
+        gradingProgress = 2;
+      } else if (!score.grade3) {
+        gradingProgress = 3;
       }
+      else if (!score.gradeF) {
+        gradingProgress = 4;
+      }
+
+      const updateData: Prisma.ScoreUpdateManyMutationInput = {
+        grade1: gradingProgress == 1 ? grade : score.grade1,
+        grade2: gradingProgress == 2 ? grade : score.grade2,
+        grade3: gradingProgress == 3 ? grade : score.grade3,
+        gradeF: gradingProgress == 4 ? (score.grade1 + score.grade2 + score.grade3) / 3
+          : score.gradeF,
+      };
+
+      updatedScores.push(updateData);
     }
+
 
     return prisma.score.updateMany({ where: { id: { in: scoreIds } }, data: updatedScores });
   }
