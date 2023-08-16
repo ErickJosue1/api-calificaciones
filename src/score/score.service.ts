@@ -63,9 +63,6 @@ export class ScoreService {
     const scoreIds = groupScores.scoreId;
 
 
-
-
-
     const { scoreId, grade } = groupScores;
     const score = await prisma.score.findUnique({ where: { id: scoreId } });
 
@@ -83,7 +80,7 @@ export class ScoreService {
         gradingProgress = 4;
       }
 
-      const updateData: Prisma.ScoreUpdateManyMutationInput = {
+      const updateData: Prisma.ScoreUpdateInput = {
         grade1: gradingProgress == 1 ? grade : score.grade1,
         grade2: gradingProgress == 2 ? grade : score.grade2,
         grade3: gradingProgress == 3 ? grade : score.grade3,
@@ -95,7 +92,7 @@ export class ScoreService {
     }
 
 
-    return prisma.score.updateMany({ where: { id: { in: scoreIds } }, data: updatedScores });
+    return prisma.score.update({ where: { id: groupScores.scoreId }, data: updatedScores[0] });
   }
 
   findAll() {
