@@ -68,6 +68,7 @@ export class ScoreService {
 
     if (score) {
       let gradingProgress = 1;
+      let califF = score.gradeF;
 
       if (!score.grade1) {
         gradingProgress = 1;
@@ -75,10 +76,9 @@ export class ScoreService {
         gradingProgress = 2;
       } else if (!score.grade3) {
         gradingProgress = 3;
+        califF = (score.grade1 + score.grade2 + score.grade3) / 3;
       }
-      else if (!score.gradeF) {
-        gradingProgress = 4;
-      }
+ 
 
       console.log(gradingProgress)
 
@@ -86,8 +86,7 @@ export class ScoreService {
         grade1: gradingProgress == 1 ? grade : score.grade1,
         grade2: gradingProgress == 2 ? grade : score.grade2,
         grade3: gradingProgress == 3 ? grade : score.grade3,
-        gradeF: gradingProgress == 4 ? (score.grade1 + score.grade2 + score.grade3) / 3
-          : score.gradeF,
+        gradeF: califF
       };
 
       updatedScores.push(updateData);
